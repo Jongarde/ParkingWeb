@@ -1,6 +1,6 @@
 import mysql.connector as con
 from mysql.connector import errorcode
-
+import re
 
 def mysqlConnexion():
     try:
@@ -24,15 +24,47 @@ def mysqlConnexion():
 
     return db
 
-#TO-DO: Incomplete method for registration(more verifications and INSERT query with mySQL)
 def registerEmployee(dni, name, mail, pw, pw_conf):
     db = mysqlConnexion()
     mycursor = db.cursor()
+
+    # Variables used for register verification
+    alphabet = "TRWAGMYFPDXBNJZSQVHLCKE"
+    letter_idx = int(dni[:8])%23
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
     registerable = True
-    if(pw != pw_conf):
+    if(alphabet[letter_idx] != dni[8:]):
         registerable = False
-    return 0
+        print("This DNI does not match with the pattern!")
+    elif(re.fullmatch(regex, mail)==False):
+        registerable = False
+        print("This mail direction does not match with the pattern!")
+    elif(pw != pw_conf):
+        registerable = False
+        print("The passwords were different!")
+    
+    if(registerable):
+        mycursor.execute("INSERT INTO Employee (Employee_DNI, Employee_name, Employee_mail, Employee_pw) VALUES (%s,%s,%s,%s)", (dni, name, mail, pw))
+        db.commit()
+    else:
+        print("The data that you entered could not be registered. Check the error above for further information!")
+
+    db.close()
 
 #TO-DO: Login method
 def loginEmployee(dni, pw):
     return 0
+
+def checkDatabase():
+    db = mysqlConnexion()
+    mycursor = db.cursor()
+    mycursor.execute("SELECT * FROM Employee")
+
+    print("Employees registered in our database:")
+    for e in mycursor:
+        print(e)
+
+    db.close()
+
+checkDatabase()
