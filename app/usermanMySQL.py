@@ -2,11 +2,21 @@ import mysql.connector as con
 from mysql.connector import errorcode
 import re
 
+def getCredentials():
+    with open('mysql-user.txt', 'r') as f:
+        contents = f.read()
+    us_pw = contents.split('\n')[0], contents.split('\n')[1]
+    return us_pw
+
 def mysqlConnexion():
     try:
+        credentials = getCredentials()
+    except:
+        print("You must have a file showing your mysql credentials (username, root) in the same directory as the app folder.")
+    try:
         db = con.connect(host='localhost',
-                         user='root',
-                         passwd='deusto',
+                         user=credentials[0],
+                         passwd=credentials[1],
                          database='parkingadmins')
         mycursor = db.cursor()
         mycursor.execute("CREATE TABLE if not exists Employee (Employee_DNI VARCHAR(9) PRIMARY KEY, Employee_name VARCHAR(50), Employee_mail VARCHAR(50), Employee_pw VARCHAR(50))")
@@ -15,8 +25,8 @@ def mysqlConnexion():
             print("Something is wrong with your user name or password")
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             db = con.connect(host='localhost',
-                             user='root',
-                             passwd='deusto')
+                             user=credentials[0],
+                             passwd=credentials[1])
             db.cursor().execute("CREATE DATABASE parkingadmins")
             print("Database does not exist. We created the database for you, you must rerun the code.")
         else:
