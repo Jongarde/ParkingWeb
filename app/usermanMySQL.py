@@ -98,3 +98,5 @@ def checkDatabase():
         print(e)
 
     db.close()
+
+checkDatabase()

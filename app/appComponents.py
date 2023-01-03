@@ -21,3 +21,9 @@ class Incidence(BaseModel):
     id: int
     registration_vehicle: str
     text: str
+
+class Reservation(BaseModel):
+    registration_plate: str
+    id_parkingLot: int
+    start_reservation: int
+    end_reservation: int

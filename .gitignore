@@ -1,5 +1,5 @@
 **/env/
-**/mysql-user.txt
+**/app/mysql-user.txt
 **/app/__pycache__/
 **/node_modules/
 **/package-lock.json
