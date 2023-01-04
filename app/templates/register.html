@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple login form</title>
+    <title>Simple Register form</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
       html, body {
@@ -60,26 +60,38 @@
   </head>
   <body>
     <form action="/action_page.php">
-      <h1>Login Form</h1>
+      <h1>Register Form</h1>
       <div class="formcontainer">
         <form>
           <div class="container">
             <label for="dni"><strong>Your ID</strong></label>
             <input type="text" placeholder="Enter your id" id="dni">
+            <label for="name"><strong>Name</strong></label>
+            <input type="text" placeholder="Enter your name" id="name">
+            <label for="email"><strong>Email</strong></label>
+            <input type="text" placeholder="Enter Mail" id="email">
             <label for="pasw"><strong>Password</strong></label>
             <input type="password" placeholder="Enter Password" id="pasw">
+            <label for="r_pasw"><strong>Repeat Password</strong></label>
+            <input type="password" placeholder="Enter Password again" id="r_pasw">
           </div>
-          <button type="button" onclick="login()">Login</button>
+          <button type="button" onclick="register()">Register</button>
         </form>
         <script>
-          function login() {
+          function register() {
             var dni = document.getElementById("dni").value;
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
             var pasw = document.getElementById("pasw").value;
-            fetch('/login', {
+            var r_pasw = document.getElementById("r_pasw").value;
+            fetch('/register', {
               method: 'POST',
               body: JSON.stringify({
                 dni: dni,
-                pasw: pasw
+                name: name,
+                email: email,
+                pasw: pasw,
+                r_pasw: r_pasw
               }),
               headers: {
                 'Content-Type': 'application/json'
@@ -91,13 +103,13 @@
               if (result.success) {
                 window.location = "/test";
               } else {
-                alert("Invalid username or password");
+                alert("The registration couldn't be completed.");
               }
             });
           }
         </script>
       <div class="container">
-        <span class="psw"><a href="/register"> I'm not registered yet</a></span>
+        <span class="psw"><a href="/login"> I'm already registered</a></span>
       </div>
     </form>
   </body>

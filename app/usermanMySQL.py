@@ -60,8 +60,11 @@ def registerEmployee(dni, name, mail, pw, pw_conf):
             db.commit()
 
             db.close()
+
+            return True
         else:
             print("The data that you entered could not be registered. Check the error above for further information!")
+            return False
     except:
         print("""Registration process could not succeed, make sure that:
         \t-The length of the DNI is exactly 9 characters.
