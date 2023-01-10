@@ -52,6 +52,26 @@
         padding-top: 0;
         padding-right: 15px;
       }
+      .parking-lot {
+        display: grid;
+        grid-template-columns: 60px 60px;
+        grid-gap: 1px;
+      }
+
+      .parking-slot {
+        background-color: #ccc;
+        border: 1px solid #000;
+        height: 50px;
+        width: 50px;
+      }
+
+      .parking-slot.empty {
+        background-color: #fff;
+      }
+
+      .parking-slot.occupied {
+        background-color: #ff0000;
+      }
       @media screen and (max-width: 300px) {
         span.psw {
           display: block;
@@ -76,6 +96,13 @@
             <input type="password" placeholder="Enter Password" id="pasw">
             <label for="r_pasw"><strong>Repeat Password</strong></label>
             <input type="password" placeholder="Enter Password again" id="r_pasw">
+            <label for="brands-input">Select a brand from the list:</label>
+            <input list="brands" id="brands-input">
+            <datalist id="brands">
+              {% for item in my_list %}
+                <option value="{{ item }}">
+              {% endfor %}
+            </datalist>
           </div>
           <button type="button" onclick="register()">Register</button>
         </form>
@@ -110,6 +137,26 @@
             });
           }
         </script>
+      <div class="parking-lot">
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+        <div class="parking-slot"></div>
+      </div>
       <div class="container">
         <span class="psw"><a href="/login"> I'm already registered</a></span>
       </div>

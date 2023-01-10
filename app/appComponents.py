@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class Owner(BaseModel):
     dni: str
@@ -27,3 +27,6 @@ class Reservation(BaseModel):
     id_parkingLot: int
     start_reservation: int
     end_reservation: int
+
+class BrandListRequest(BaseModel):
+    brands: List[str]

@@ -1,15 +1,17 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
-from jinja2 import Environment, FileSystemLoader
-from appComponents import Reservation
+from jinja2 import Environment, FileSystemLoader, Template
+from appComponents import Reservation, BrandListRequest
 from usermanMySQL import loginEmployee, registerEmployee
 import datetime
+import json
 
 app = FastAPI()
 
 env = Environment(loader=FileSystemLoader("templates"))
 login_template = env.get_template("login.html")
 register_template = env.get_template("register.html")
+template = Template(open("templates/main.html").read())
 
 @app.get("/login")
 def login():
@@ -52,3 +54,18 @@ def register():
 @app.post("/reservations")
 def makeReservation(reservation: Reservation):
     return {"message": f"The car with the registration number {reservation.registration_plate} has reserved the space nº{reservation.id_parkingLot} from {datetime.datetime.fromtimestamp(reservation.start_reservation)} to {datetime.datetime.fromtimestamp(reservation.end_reservation)}"}
+
+@app.post("/brands")
+def process_brands(request: BrandListRequest):
+    received_brands = request.brands
+    with open("brands.json", "w") as f:
+        json.dump(received_brands, f)
+    return received_brands
+
+@app.get("/brands")
+def get_brands():
+    with open("brands.json", "r") as f:
+        brands = json.load(f)
+    content = template.render(my_list=brands)
+    return HTMLResponse(content=content, status_code=200, headers={"content-type": "text/html"})
+    #return brands[0]
