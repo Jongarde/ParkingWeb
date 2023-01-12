@@ -5,6 +5,8 @@ from appComponents import Reservation, BrandListRequest
 from usermanMySQL import loginEmployee, registerEmployee
 import datetime
 import json
+import os
+import imageio
 
 app = FastAPI()
 
@@ -57,15 +59,25 @@ def makeReservation(reservation: Reservation):
 
 @app.post("/brands")
 def process_brands(request: BrandListRequest):
+    file_path = "slots.json"
+    if os.path.getsize(file_path) == 0:
+        slot_number = 36
+        slots = []
+        for i in range(slot_number):
+            slots.append(0)
+        with open(file_path, "w") as file:
+            json.dump(slots, file)
+
     received_brands = request.brands
     with open("brands.json", "w") as f:
         json.dump(received_brands, f)
-    return received_brands
+    return {"success": True}
 
 @app.get("/brands")
 def get_brands():
+    with open("slots.json", "r") as f:
+        slots = json.load(f)
     with open("brands.json", "r") as f:
         brands = json.load(f)
-    content = template.render(my_list=brands)
+    content = template.render(my_list=brands, slot_list=slots)
     return HTMLResponse(content=content, status_code=200, headers={"content-type": "text/html"})
-    #return brands[0]

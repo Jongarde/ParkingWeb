@@ -15,7 +15,7 @@
       form {
         border: 5px solid #f1f1f1;
       }
-      input[type=text], input[type=password] {
+      input[type=text], input[type=password], input[type=date], input[type=time] {
         width: 100%;
         padding: 16px 8px;
         margin: 8px 0;
@@ -43,26 +43,27 @@
         text-align: left;
         margin: 24px 50px 12px;
       }
-      .container {
-        padding: 16px 0;
-        text-align:left;
-      }
       span.psw {
         float: center;
         padding-top: 0;
         padding-right: 15px;
       }
       .parking-lot {
+        padding-top: 20px;
+        border: 5px solid #8ebf42;
+        background-color: rgb(52, 52, 52);
         display: grid;
-        grid-template-columns: 60px 60px;
-        grid-gap: 1px;
+        grid-template-columns: 175px 100px 175px 100px;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 20px;
       }
 
       .parking-slot {
-        background-color: #ccc;
-        border: 1px solid #000;
+        background-color: rgb(52, 52, 52);
+        border: 2px solid #fff;
         height: 50px;
-        width: 50px;
+        width: 100px;
       }
 
       .parking-slot.empty {
@@ -86,17 +87,14 @@
       <div class="formcontainer">
         <form>
           <div class="container">
-            <label for="dni"><strong>Your ID</strong></label>
-            <input type="text" placeholder="Enter your id" id="dni">
-            <label for="name"><strong>Name</strong></label>
-            <input type="text" placeholder="Enter your name" id="name">
-            <label for="email"><strong>Email</strong></label>
-            <input type="text" placeholder="Enter Mail" id="email">
-            <label for="pasw"><strong>Password</strong></label>
-            <input type="password" placeholder="Enter Password" id="pasw">
-            <label for="r_pasw"><strong>Repeat Password</strong></label>
-            <input type="password" placeholder="Enter Password again" id="r_pasw">
-            <label for="brands-input">Select a brand from the list:</label>
+            <label for="dni"><strong>Client's ID</strong></label>
+            <input type="text" placeholder="Enter the client's id" id="dni">
+            <label for="r_plate"><strong>Registration Plate</strong></label>
+            <input type="text" placeholder="Enter the registration plate of the client's car" id="r_plate">
+            <label for="reservation-end"><strong>Reservation end date:</strong></label>
+            <input type="time" id="reservation-end-time">
+            <input type="date" id="reservation-end-date">
+            <label for="brands-input"><strong>Select a brand from the list:</strong></label>
             <input list="brands" id="brands-input">
             <datalist id="brands">
               {% for item in my_list %}
@@ -104,62 +102,36 @@
               {% endfor %}
             </datalist>
           </div>
-          <button type="button" onclick="register()">Register</button>
+          <button type="button" onclick="reserve()">Register</button>
         </form>
+        <div class="parking-lot">
+          {% for slot in slot_list %}
+            <div class="parking-slot">
+              {% if image == 1 %}
+                <a href="https://www.freeiconspng.com/img/34878" title="Image from freeiconspng.com">
+                  <img src="https://www.freeiconspng.com/uploads/white-modern-car-top-view-24.png" alt="White Modern Car Top View" width="100" height="50">
+                </a>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
         <script>
-          function register() {
-            var dni = document.getElementById("dni").value;
-            var name = document.getElementById("name").value;
-            var email = document.getElementById("email").value;
-            var pasw = document.getElementById("pasw").value;
-            var r_pasw = document.getElementById("r_pasw").value;
-            fetch('/register', {
-              method: 'POST',
-              body: JSON.stringify({
-                dni: dni,
-                name: name,
-                email: email,
-                pasw: pasw,
-                r_pasw: r_pasw
-              }),
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .then(result => {
-              console.log(result)
-              if (result.success) {
-                window.location = "/test";
-              } else {
-                alert("The registration couldn't be completed.");
-              }
-            });
+          function reserve() {
+            var parkingSlots = document.getElementsByClassName("parking-slot");
+            var randomIndex = Math.floor(Math.random() * parkingSlots.length);
+            var randomParkingSlot = parkingSlots[randomIndex];
+            var a = document.createElement("a");
+            a.href = "https://www.freeiconspng.com/img/34878";
+            a.title = "Image from freeiconspng.com";
+            var img = document.createElement("img");
+            img.src = "https://www.freeiconspng.com/uploads/white-modern-car-top-view-24.png";
+            img.alt = "White Modern Car Top View";
+            img.width = "100";
+            img.heigth = "50";
+            a.appendChild(img);
+            randomParkingSlot.appendChild(a);
           }
         </script>
-      <div class="parking-lot">
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-        <div class="parking-slot"></div>
-      </div>
-      <div class="container">
-        <span class="psw"><a href="/login"> I'm already registered</a></span>
-      </div>
     </form>
   </body>
 </html>
