@@ -29,22 +29,4 @@ function getBrands(){
   
 }
 
-function getModels(brand){
-  const options = {
-    url: `https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getModels&make=${brand}`,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
-  request(options, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      body = body.substring(12, body.length - 3)
-      const data = JSON.parse(body);
-      const modelNames = data.map(item => item.model_name);
-      console.log(modelNames);
-    }
-  });
-}
-
 getBrands()

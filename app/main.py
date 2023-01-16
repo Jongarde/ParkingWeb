@@ -1,13 +1,11 @@
 from fastapi import FastAPI, Request, HTTPException, Path
 from fastapi.responses import HTMLResponse
 from jinja2 import Environment, FileSystemLoader, Template
-from appComponents import Reservation, BrandListRequest
+from appComponents import BrandListRequest
 from usermanMySQL import loginEmployee, registerEmployee
 from comprobations import checkDNI, checkRegistration, checkDate, getPrice
-import datetime
 import json
 import os
-import imageio
 
 app = FastAPI()
 
@@ -18,11 +16,11 @@ reservation_checker_template = env.get_template("reservation.html")
 template = Template(open("templates/main.html").read())
 detail_template = Template(open("templates/reservation_detail.html").read())
 
-@app.get("/login")
+@app.get("/login", tags=["employees"])
 def login():
     return HTMLResponse(login_template.render())
 
-@app.post("/login")
+@app.post("/login", tags=["employees"])
 async def login(request: Request):
     data = await request.json()
     dni = data["dni"]
@@ -33,11 +31,11 @@ async def login(request: Request):
     else:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
 
-@app.get("/register")
+@app.get("/register", tags=["employees"])
 def register():
     return HTMLResponse(register_template.render())
 
-@app.post("/register")
+@app.post("/register", tags=["employees"])
 async def register(request: Request):
     data = await request.json()
     dni = data["dni"]
@@ -51,11 +49,11 @@ async def register(request: Request):
     else:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
 
-@app.get("/reservations")
+@app.get("/reservations", tags=["clients"])
 def register():
     return HTMLResponse(reservation_checker_template.render())
 
-@app.post("/reservations")
+@app.post("/reservations", tags=["employees"])
 async def makeReservation(request: Request):
     data = await request.json()
     dni = data["dni"]
@@ -94,7 +92,7 @@ async def makeReservation(request: Request):
             "enddate": enddate, 
             "brand": brand, 
             "slot": randomIndex,
-            "price": getPrice(enddate, endtime)
+            "price": round(getPrice(enddate, endtime), 2)
         })
         with open("reservations.json", "w") as f:
             json.dump(reservations, f)
@@ -108,7 +106,7 @@ async def makeReservation(request: Request):
     else:
         raise HTTPException(status_code=401, detail="Reservation could not be completed")
 
-@app.post("/checker")
+@app.post("/checker", tags=["clients"])
 async def register(request: Request):
     data = await request.json()
     r_plate = data["r_plate"]
@@ -117,7 +115,7 @@ async def register(request: Request):
     else:
         raise HTTPException(status_code=401, detail="Wrong registration plate format")
 
-@app.get("/reservations/{r_plate}")
+@app.get("/reservations/{r_plate}", tags=["clients"])
 async def read_item(r_plate: str = Path(..., title="The registration plate of the vehicle parked")):
     with open("reservations.json", "r") as f:
         reservations = json.load(f)
@@ -131,7 +129,7 @@ async def read_item(r_plate: str = Path(..., title="The registration plate of th
         content = detail_template.render(dict=rese)
         return HTMLResponse(content=content, status_code=200, headers={"content-type": "text/html"})
 
-@app.get("/brands")
+@app.get("/brands", tags=["employees"])
 def get_brands():
     with open("slots.json", "r") as f:
         slots = json.load(f)
@@ -140,7 +138,7 @@ def get_brands():
     content = template.render(my_list=brands, slot_list=slots)
     return HTMLResponse(content=content, status_code=200, headers={"content-type": "text/html"})
 
-@app.post("/brands")
+@app.post("/brands", tags=["employees"])
 def process_brands(request: BrandListRequest):
     file_path = "reservations.json"
     if os.path.getsize(file_path) == 0:

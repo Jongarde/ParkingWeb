@@ -15,31 +15,11 @@
       form {
         border: 5px solid #f1f1f1;
       }
-      input[type=text], input[type=password] {
-        width: 100%;
-        padding: 16px 8px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-      }
-      button {
-        background-color: #8ebf42;
-        color: white;
-        padding: 14px 0;
-        margin: 10px 0;
-        border: none;
-        cursor: grabbing;
-        width: 100%;
-      }
       h1 {
         text-align:center;
         font-size:18;
         padding-left: 15px;
         padding-right: 15px;
-      }
-      button:hover {
-        opacity: 0.8;
       }
       .formcontainer {
         text-align: left;
@@ -72,7 +52,7 @@
             <li><strong>Reservation end:</strong> {{dict.enddate}} {{dict.endtime}}</li>
             <li><strong>Brand:</strong> {{dict.brand}}</li>
             <li><strong>Slot:</strong> {{dict.slot}}</li>
-            <li><strong>Price:</strong> {{dict.price}}</li>
+            <li><strong>Price:</strong> {{dict.price}} euros</li>
           </ul>
         </div>
       </div>
