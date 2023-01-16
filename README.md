@@ -31,3 +31,9 @@ Luego lanza el servicio de node, mientras el servidor está lanzado de la siguie
 ```
 node carModels.js
 ```
+
+Tras un primer lanzamiento habiendo seguido estos pasos, los siguientes lanzamientos de la aplicación web, consistirán en el lanzamiento del siguiente comando.
+
+```
+uvicorn main:app --reload
+```
