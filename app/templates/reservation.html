@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Register form</title>
+    <title>Reservation checker</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
       html, body {
@@ -62,38 +62,22 @@
   </head>
   <body>
     <form action="/action_page.php">
-      <h1>Register Form</h1>
+      <h1>Reservation Checker</h1>
       <div class="formcontainer">
         <form>
           <div class="container">
-            <label for="dni"><strong>Your ID</strong></label>
-            <input type="text" placeholder="Enter your id" id="dni">
-            <label for="name"><strong>Name</strong></label>
-            <input type="text" placeholder="Enter your name" id="name">
-            <label for="email"><strong>Email</strong></label>
-            <input type="text" placeholder="Enter Mail" id="email">
-            <label for="pasw"><strong>Password</strong></label>
-            <input type="password" placeholder="Enter Password" id="pasw">
-            <label for="r_pasw"><strong>Repeat Password</strong></label>
-            <input type="password" placeholder="Enter Password again" id="r_pasw">
+            <label for="r_plate"><strong>Registration Plate</strong></label>
+            <input type="text" placeholder="Enter the registration plate of your car" id="r_plate">
           </div>
-          <button type="button" onclick="register()">Register</button>
+          <button type="button" onclick="check()">Check</button>
         </form>
         <script>
-          function register() {
-            var dni = document.getElementById("dni").value;
-            var name = document.getElementById("name").value;
-            var email = document.getElementById("email").value;
-            var pasw = document.getElementById("pasw").value;
-            var r_pasw = document.getElementById("r_pasw").value;
-            fetch('/register', {
+          function check() {
+            var r_plate = document.getElementById("r_plate").value;
+            fetch('/checker', {
               method: 'POST',
               body: JSON.stringify({
-                dni: dni,
-                name: name,
-                email: email,
-                pasw: pasw,
-                r_pasw: r_pasw
+                r_plate: r_plate
               }),
               headers: {
                 'Content-Type': 'application/json'
@@ -103,16 +87,13 @@
             .then(result => {
               console.log(result)
               if (result.success) {
-                window.location = "/brands";
+                window.location = "/reservations/" + r_plate;
               } else {
-                alert("The registration couldn't be completed.");
+                alert("Invalid registration plate");
               }
             });
           }
         </script>
-      <div class="container">
-        <span class="psw"><a href="/login"> I'm already registered</a></span>
-      </div>
     </form>
   </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple login form</title>
+    <title>Reservation details</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
       html, body {
@@ -35,6 +35,8 @@
       h1 {
         text-align:center;
         font-size:18;
+        padding-left: 15px;
+        padding-right: 15px;
       }
       button:hover {
         opacity: 0.8;
@@ -62,44 +64,17 @@
   </head>
   <body>
     <form action="/action_page.php">
-      <h1>Login Form</h1>
+      <h1>Reservation for car: {{dict.registration}}</h1>
       <div class="formcontainer">
-        <form>
-          <div class="container">
-            <label for="dni"><strong>Your ID</strong></label>
-            <input type="text" placeholder="Enter your id" id="dni">
-            <label for="pasw"><strong>Password</strong></label>
-            <input type="password" placeholder="Enter Password" id="pasw">
-          </div>
-          <button type="button" onclick="login()">Login</button>
-        </form>
-        <script>
-          function login() {
-            var dni = document.getElementById("dni").value;
-            var pasw = document.getElementById("pasw").value;
-            fetch('/login', {
-              method: 'POST',
-              body: JSON.stringify({
-                dni: dni,
-                pasw: pasw
-              }),
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .then(result => {
-              console.log(result)
-              if (result.success) {
-                window.location = "/brands";
-              } else {
-                alert("Invalid username or password");
-              }
-            });
-          }
-        </script>
-      <div class="container">
-        <span class="psw"><a href="/register"> I'm not registered yet</a></span>
+        <div class="container">
+          <ul>
+            <li><strong>DNI:</strong> {{dict.dni}}</li>
+            <li><strong>Reservation end:</strong> {{dict.enddate}} {{dict.endtime}}</li>
+            <li><strong>Brand:</strong> {{dict.brand}}</li>
+            <li><strong>Slot:</strong> {{dict.slot}}</li>
+            <li><strong>Price:</strong> {{dict.price}}</li>
+          </ul>
+        </div>
       </div>
     </form>
   </body>
